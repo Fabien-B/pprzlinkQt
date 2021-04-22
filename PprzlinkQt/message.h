@@ -11,36 +11,37 @@ public:
     Message(MessageDefinition definition);
     Message(MessageDefinition definition, QStringList values);
 
+    bool isComplete();
+    QString getSender() { return sender;}
+    void setSender(QString s) {
+        sender = s;
+    }
+    MessageDefinition getDefinition() { return definition;}
+
     template<
       typename T,
       typename E = typename std::enable_if<std::is_arithmetic<T>::value>::type
     >
     void getField(QString field_name, T& arg){
-         for(int i=0; i < fields.size(); i++) {
-             if(definition.getFields()[i].name == field_name) {
-
-                 arg = std::any_cast<T>(fields[i]);
-             }
-         }
+        if(!fields.contains(field_name)) {
+            throw std::runtime_error("No such field: \"" + field_name.toStdString() + "\"!");
+        }
+        arg = std::any_cast<T>(fields[field_name]);
      }
 
-    void getField(QString field_name, QString& arg){
-         for(int i=0; i < fields.size(); i++) {
-             if(definition.getFields()[i].name == field_name) {
-                 arg = std::any_cast<QString>(fields[i]);
-             }
-         }
-     }
+    QString getField(QString field_name);
+
+    void getField(QString field_name, QString& arg);
+
+    template<typename T>
+    void addField(QString name, T value);
 
     MessageDefinition messageDefinition() const {return definition;}
 
 private:
-
-    template<typename T>
-    void addField(T value);
-
     MessageDefinition definition;
-    QList<std::any> fields;
+    QString sender;
+    QMap<QString, std::any> fields;
 };
 
 #endif // MESSAGE_H
