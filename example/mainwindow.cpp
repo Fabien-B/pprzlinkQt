@@ -23,13 +23,21 @@ MainWindow::MainWindow(QWidget *parent) :
         msg.getField("ac_id", ac_id);
         msg.getField("alt", alt);
         //qDebug() << ac_id << alt;
-        ui->label->setText(QString("%1 alt: %2 m").arg(ac_id, alt));
+        ui->label->setText(ac_id + QString("  alt: %1 m").arg(alt));
 
     });
 
-    //connect(ui->line_edit, &QLineEdit::returnPressed, this, [=]() {
+    connect(ui->line_edit, &QLineEdit::returnPressed, this, [=]() {
     //    ivyqt->send(ui->line_edit->text());
-    //});
+        Message msg(pp->getDefinition("MOVE_WAYPOINT"));
+        msg.setSender("ground");
+        msg.addField("ac_id", QString("2"));
+        msg.addField("wp_id", (uint8_t)2);
+        msg.addField("lat", (float)43.456);
+        msg.addField("long", (float)1.345);
+        msg.addField("alt", (float)123.3);
+        pp->sendMessage(msg);
+    });
 }
 
 MainWindow::~MainWindow()
