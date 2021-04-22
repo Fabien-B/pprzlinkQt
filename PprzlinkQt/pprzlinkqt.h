@@ -17,10 +17,13 @@ public:
     int bind(QString msg_name, QObject* context, std::function<void(QString sender, Message)>);
     int bind(QString msg_name, std::function<void(QString sender, Message)>);
     void unBind(int bindId);
+    void sendMessage(Message &msg);
+    MessageDefinition getDefinition(QString msg_name);
 
 signals:
 
 private:
+    static QString stringOfMessage(Message &msg);
     void parse_definitions(QString filename);
     QList<MessageDefinition> message_definitions;
     //QMap<int /*bindId*/, MessageDefinition> bindings;

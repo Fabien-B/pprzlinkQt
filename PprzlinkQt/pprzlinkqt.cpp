@@ -59,24 +59,43 @@ int PprzlinkQt::bind(QString msg_name, std::function<void(QString sender, Messag
 }
 
 int PprzlinkQt::bind(QString msg_name, QObject* context,  std::function<void(QString sender, Message)> callback) {
+    auto def = getDefinition(msg_name);
+    return ivyqt->bindMessage(def.toRegex(), context, [=](Peer* peer, QStringList params) {
+        (void)peer;
+        QString sender = params.takeFirst();
+        Message msg(def, params);
+        callback(sender, msg);
+    });
+}
+
+MessageDefinition PprzlinkQt::getDefinition(QString msg_name) {
     for(auto &def: qAsConst(message_definitions)) {
         if(def.getName() == msg_name) {
-            qDebug() << def.toRegex();
-            return ivyqt->bindMessage(def.toRegex(), context, [=](Peer* peer, QStringList params) {
-                (void)peer;
-                QString sender = params.takeFirst();
-                Message msg(def, params);
-                callback(sender, msg);
-            });
+            return def;
         }
     }
-
-    throw std::runtime_error("no sush message!");
-
+    throw std::runtime_error("no such message: " + msg_name.toStdString() + "!");
 }
 
 void PprzlinkQt::unBind(int bindId) {
     ivyqt->unBindMessage(bindId);
 }
 
-//std::function<void(Peer*, QStringList)>
+void PprzlinkQt::sendMessage(Message &msg) {
+    assert(msg.isComplete());
+    auto message = stringOfMessage(msg);
+    qDebug() << message;
+    ivyqt->send(message);
+}
+
+QString PprzlinkQt::stringOfMessage(Message &msg) {
+    QString str = msg.getSender() + " " + msg.getDefinition().getName();
+
+    for(auto fdef: msg.getDefinition().getFields()) {
+        str += " " + msg.getField(fdef.name);
+    }
+
+    //TODO
+
+    return str;
+}
