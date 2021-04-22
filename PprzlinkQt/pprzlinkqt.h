@@ -4,7 +4,8 @@
 #include <QObject>
 #include "message_definition.h"
 #include "message.h"
-#include "ivyqt.h"
+
+class IvyQt;
 
 class PprzlinkQt : public QObject
 {
