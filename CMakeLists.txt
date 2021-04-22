@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(IvyQtExample LANGUAGES CXX)
+project(PprzlinkQt LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
@@ -23,9 +23,10 @@ set(IvyQt_DIR "IvyQt/IvyQt/")
 add_subdirectory(${IvyQt_DIR} ivyqt)
 
 set(PROJECT_SOURCES
-        main.cpp
-        pprzlinkqt.cpp
-        message_definition.cpp
+        src/main.cpp
+        src/pprzlinkqt.cpp
+        src/message_definition.cpp
+        src/message.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
