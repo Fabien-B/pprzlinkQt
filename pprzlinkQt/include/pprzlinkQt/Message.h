@@ -73,7 +73,7 @@ namespace pprzlink {
       auto const &it = fieldValues.find(name);
       if (it == fieldValues.end())
       {
-        throw field_has_no_value("In message " + def.getName().toStdString() + " field " + name.toStdString() + " has not value !");
+        throw field_has_no_value("In message " + def.getName() + " field " + name + " has not value !");
       }
       it->second.getValue(value);
     }
