@@ -18,7 +18,7 @@
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Send &quot;Hello &lt;name&gt;&quot; to change the label text.</string>
+       <string>Start paparazzi with one AC to update the label.</string>
       </property>
      </widget>
     </item>
@@ -53,7 +53,7 @@
     <item>
      <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>enter text and press ENTER to send it.</string>
+       <string>enter a block number and press ENTER to send it.</string>
       </property>
      </widget>
     </item>

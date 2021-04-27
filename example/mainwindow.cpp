@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "pprzlinkqt.h"
+#include <QDebug>
+#include "pprzlinkQt/MessageDictionary.h"
+#include "pprzlinkQt/Message.h"
+#include "pprzlinkQt/IvyQtLink.h"
+#include "iostream"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -8,35 +12,42 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->label_button, &QPushButton::clicked, this, [=]() {
-        //vbox->removeWidget(label);
+    auto dict = new pprzlink::MessageDictionary("/home/fabien/paparazzi/var/messages.xml");
+
+    auto link = new pprzlink::IvyQtLink(*dict, "test", "127.255.255.255:2010", this);
+
+    auto def_fp = dict->getDefinition("FLIGHT_PARAM");
+
+    link->BindMessage(def_fp, ui->label, [=](QString, pprzlink::Message msg){
+        float alt, lat, lon;
+        msg.getField("ac_id", last_ac_id);
+        msg.getField("alt", alt);
+        msg.getField("lat", lat);
+        msg.getField("long", lon);
+        qDebug() << last_ac_id + " " + QString::number(alt) + "m" + "  " + QString::number(lat) + " " + QString::number(lon);
+        ui->label->setText(last_ac_id + " " + QString::number(alt) + "m" + "  " + QString::number(lat) + " " + QString::number(lon));
+    });
+
+    connect(ui->label_button, &QPushButton::clicked, ui->label, [=]() {
         ui->label->deleteLater();
     });
 
 
-    auto pp = new PprzlinkQt("/home/fabien/paparazzi/var/messages.xml", "testPprzLinkQt", "testPprzLinkQt ready");
-    pp->start("127.255.255.255", 2010);
-    
-    pp->bind("FLIGHT_PARAM", ui->label, [=](QString sender, Message msg) {
-        QString ac_id;
-        float alt;
-        msg.getField("ac_id", ac_id);
-        msg.getField("alt", alt);
-        //qDebug() << ac_id << alt;
-        ui->label->setText(ac_id + QString("  alt: %1 m").arg(alt));
-
-    });
-
     connect(ui->line_edit, &QLineEdit::returnPressed, this, [=]() {
-    //    ivyqt->send(ui->line_edit->text());
-        Message msg(pp->getDefinition("MOVE_WAYPOINT"));
-        msg.setSender("ground");
-        msg.addField("ac_id", QString("2"));
-        msg.addField("wp_id", (uint8_t)2);
-        msg.addField("lat", (float)43.456);
-        msg.addField("long", (float)1.345);
-        msg.addField("alt", (float)123.3);
-        pp->sendMessage(msg);
+        bool ok = false;
+        uint8_t block_id = ui->line_edit->text().toUInt(&ok);
+        if(ok) {
+            auto def = dict->getDefinition("JUMP_TO_BLOCK");
+            auto msg = pprzlink::Message(def);
+            msg.addField("ac_id", last_ac_id);
+            msg.addField("block_id", block_id);
+
+            msg.setSenderId("ground");
+
+            link->sendMessage(msg);
+        } else {
+            qDebug() << "not a number!!!";
+        }
     });
 }
 

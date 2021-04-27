@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QString last_ac_id;
 };
 
 #endif // MAINWINDOW_H
