@@ -176,7 +176,7 @@ namespace pprzlink {
     auto found = fieldValues.find(name);
     if (found==fieldValues.end())
     {
-      throw pprzlink::no_such_field("No value for field "+name.toStdString());
+      throw pprzlink::no_such_field("No value for field " + name);
     }
     return found->second;
   }
@@ -187,7 +187,7 @@ namespace pprzlink {
     auto found = fieldValues.find(name);
     if (found==fieldValues.end())
     {
-      throw pprzlink::no_such_field("No value for field "+name.toStdString());
+      throw pprzlink::no_such_field("No value for field " + name);
     }
     return found->second;
   }
@@ -255,7 +255,7 @@ namespace pprzlink {
       auto const &it = fieldValues.find(name);
       if (it == fieldValues.end())
       {
-        throw field_has_no_value("In message " + def.getName().toStdString() + " field " + name.toStdString() + " has not value !");
+        throw field_has_no_value("In message " + def.getName() + " field " + name + " has not value !");
       }
       return it->second.addToBuffer(buffer);
     }

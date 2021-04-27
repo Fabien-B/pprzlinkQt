@@ -66,7 +66,7 @@ namespace pprzlink {
       }
     }
     if (baseType==BaseType::NOT_A_TYPE)
-      throw pprzlink::bad_message_file("Field with type string "+typeString.toStdString()+ " resolved to NOT_A_TYPE");
+      throw pprzlink::bad_message_file("Field with type string "+ typeString + " resolved to NOT_A_TYPE");
     auto openSquareBracketPos=typeString.indexOf('[');
     if (openSquareBracketPos != -1) // This is an array
     {

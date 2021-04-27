@@ -45,7 +45,7 @@ namespace pprzlink {
 
       if(rootElem.tagName() !="protocol")
       {
-        throw bad_message_file("Root element is not protocol in xml messages file (found "+rootElem.tagName().toStdString()+").");
+        throw bad_message_file("Root element is not protocol in xml messages file (found " + rootElem.tagName() + ").");
       }
 
 
@@ -57,7 +57,7 @@ namespace pprzlink {
           int classId = msg_class.attribute("id", "-1").toInt();
           if (className == "" || classId == -1)
           {
-            throw bad_message_file(fileName.toStdString() + " msg_class as no name or id.");
+            throw bad_message_file(fileName + " msg_class as no name or id.");
           }
           classMap.left.insert(boost::bimap<int,QString>::left_value_type(classId,className));
 
@@ -68,7 +68,7 @@ namespace pprzlink {
               int messageId = message.attribute("id", "-1").toInt();
               if (messageName == "" || messageId == -1)
               {
-                throw bad_message_file(fileName.toStdString() + " in class : " + className.toStdString() + " message as no name or id.");
+                throw bad_message_file(fileName + " in class : " + className + " message as no name or id.");
               }
               try
               {
@@ -77,7 +77,7 @@ namespace pprzlink {
                 msgNameToId.left.insert(boost::bimap<QString, std::pair<int, int>>::left_value_type(messageName,std::make_pair(classId,messageId)));
               } catch (bad_message_file &e)
               {
-                throw bad_message_file(QString(fileName + " in class : " + className + " message " + messageName + " has a bad field.").toStdString());
+                throw bad_message_file(fileName + " in class : " + className + " message " + messageName + " has a bad field.");
               }
           }
       }
@@ -89,7 +89,7 @@ namespace pprzlink {
     if (iter == messagesDict.end())
     {
       QString sstr = "could not find message with name " + name;
-      throw no_such_message(sstr.toStdString());
+      throw no_such_message(sstr);
     }
     else
     {
@@ -102,8 +102,7 @@ namespace pprzlink {
     auto iter = msgNameToId.right.find(std::make_pair(classId, msgId));
     if (iter == msgNameToId.right.end())
     {
-      QString sstr = "could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")";
-      throw no_such_message(sstr.toStdString());
+      throw no_such_message("could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")");
     }
     else
     {
@@ -119,7 +118,7 @@ namespace pprzlink {
     auto iter = msgNameToId.left.find(name);
     if (iter == msgNameToId.left.end())
     {
-      throw no_such_message("No message with name " + name.toStdString());
+      throw no_such_message("No message with name " + name);
     }
     else
     {
@@ -132,8 +131,7 @@ namespace pprzlink {
     auto iter = msgNameToId.right.find(std::make_pair(classId, msgId));
     if (iter == msgNameToId.right.end())
     {
-      QString sstr = "could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")";
-      throw no_such_message(sstr.toStdString());
+      throw no_such_message("could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")");
     }
     else
     {
@@ -146,8 +144,7 @@ namespace pprzlink {
     auto iter = classMap.right.find(name);
     if (iter == classMap.right.end())
     {
-      QString sstr = "could not find class named " + name;
-      throw no_such_class(sstr.toStdString());
+      throw no_such_class("could not find class named " + name);
     }
     else
     {
@@ -160,8 +157,7 @@ namespace pprzlink {
     auto iter = classMap.left.find(id);
     if (iter == classMap.left.end())
     {
-      QString sstr = "could not find class with id " + QString::number(id);;
-      throw no_such_class(sstr.toStdString());
+      throw no_such_class("could not find class with id " + QString::number(id));
     }
     else
     {

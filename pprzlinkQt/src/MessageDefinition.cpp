@@ -81,8 +81,7 @@ namespace pprzlink {
   {
     auto found =fieldNameToIndex.find(name);
     if (found==fieldNameToIndex.end()) {
-      auto msg = QString("No field ") + name + QString(" in message ") + getName();
-      throw no_such_field(msg.toStdString());
+      throw no_such_field("No field " + name + " in message " + getName());
     }
     return fields[found->second];
   }

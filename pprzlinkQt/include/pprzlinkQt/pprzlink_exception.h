@@ -27,17 +27,18 @@
 #define PPRZLINKCPP_PPRZLINK_EXCEPTION_H
 
 #include <stdexcept>
+#include <QString>
 
 #define DECLARE_PPRZLINK_EXCEPT(a) class a : public pprzlink_exception {\
 public:\
-explicit a(const std::string &arg) :\
+explicit a(const QString &arg) :\
   pprzlink_exception(arg) {}\
 };
 
 namespace pprzlink {
   class pprzlink_exception : public std::runtime_error {
   public:
-    pprzlink_exception(const std::string &arg) : runtime_error(arg){}
+    pprzlink_exception(const QString &arg) : runtime_error(arg.toStdString()){}
   };
 
   DECLARE_PPRZLINK_EXCEPT(wrong_message_format)

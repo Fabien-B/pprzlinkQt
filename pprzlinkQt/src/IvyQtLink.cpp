@@ -78,7 +78,7 @@ namespace pprzlink {
           if (iter == typeRegex.end())
           {
             throw wrong_message_format(
-              "IvyregexpForMessageDefinition found NOT_A_TYPE in message " + def.getField(i).getName().toStdString());
+              "IvyregexpForMessageDefinition found NOT_A_TYPE in message " + def.getField(i).getName());
           }
           QString baseRegex = iter->second;
 
@@ -155,7 +155,7 @@ namespace pprzlink {
     {
       const auto &def=msg.getDefinition();
       if(def.isRequest()) {
-        throw message_is_request("Message " + def.getName().toStdString() + " is a request message. Use sendRequest instead!");
+        throw message_is_request("Message " + def.getName() + " is a request message. Use sendRequest instead!");
       }
 
       QString ac_id;
@@ -175,7 +175,7 @@ namespace pprzlink {
         const auto &def=msg.getDefinition();
 
         if(!def.isRequest()) {
-          throw message_is_not_request("Message " + def.getName().toStdString() + " is not a request message. Use sendMessage instead!");
+          throw message_is_not_request("Message " + def.getName() + " is not a request message. Use sendMessage instead!");
         }
 
         // remove last 4 characters (_REQ) from request name to get the answer message name
@@ -227,7 +227,7 @@ namespace pprzlink {
         {
           QString sstr = params[1] + " message with wrong number of fields (expected " + def.getNbFields() + " / got " + QString::number(params.size()-2)
                + ")";
-          throw wrong_message_format(sstr.toStdString());
+          throw wrong_message_format(sstr);
         }
         for (int i = 2; i < params.size(); ++i)
         {
@@ -253,7 +253,7 @@ namespace pprzlink {
                   throw std::logic_error("NOT_A_TYPE for field " + field.getName().toStdString() + " in message " + params[1].toStdString());
                   break;
                 case BaseType::CHAR:
-                  throw wrong_message_format("Wrong field format for a char[] " + params[i].toStdString());
+                  throw wrong_message_format("Wrong field format for a char[] " + params[i]);
                   break;
                 case BaseType::INT8:
                 case BaseType::INT16:
@@ -270,7 +270,7 @@ namespace pprzlink {
                       bool ok = false;
                       double val = ele.toDouble(&ok);
                       if(!ok) {
-                          throw wrong_message_format("Wrong format for array "+params[i].toStdString());
+                          throw wrong_message_format("Wrong format for array "+params[i]);
                       }
                       values.push_back(val);
                   }
