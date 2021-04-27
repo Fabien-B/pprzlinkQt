@@ -59,7 +59,7 @@ namespace pprzlink {
   {
     for (const auto& pairs : typeMap)
     {
-      if (typeString.contains(pairs.second))
+      if (typeString.startsWith(pairs.second))
       {
         baseType = pairs.first;
         break;
