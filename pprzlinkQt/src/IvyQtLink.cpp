@@ -9,6 +9,13 @@ namespace pprzlink {
         bus = new IvyQt(appName, appName + " ready", this);
         auto ip_port = domain.split(":");
         assert(ip_port.size() == 2);
+
+        connect(bus, &IvyQt::peerReady, this, [=](Peer* peer){
+            if(peer->name() == "Paparazzi server") {
+                emit serverConnected();
+            }
+        });
+
         bus->start(ip_port[0], ip_port[1].toUInt());
     }
 

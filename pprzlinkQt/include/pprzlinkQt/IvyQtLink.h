@@ -26,6 +26,7 @@ namespace pprzlink {
         long sendRequest(const Message& msg, messageCallback_t cb);
 
     signals:
+        void serverConnected();
 
     private:
       const MessageDictionary &dictionary;
