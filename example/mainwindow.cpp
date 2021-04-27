@@ -18,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auto def_fp = dict->getDefinition("FLIGHT_PARAM");
 
+    connect(link, &pprzlink::IvyQtLink::serverConnected, this, [=]() {
+       qDebug() << "server connected!!!" ;
+    });
+
+
     link->BindMessage(def_fp, ui->label, [=](QString, pprzlink::Message msg){
         float alt, lat, lon;
         msg.getField("ac_id", last_ac_id);
