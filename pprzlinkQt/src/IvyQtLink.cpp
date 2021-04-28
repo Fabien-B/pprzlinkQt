@@ -25,8 +25,6 @@ namespace pprzlink {
 
     void IvyQtLink::stop() {
         bus->stop();
-        messagesCallbackMap.clear();
-        requestBindId.clear();
     }
 
     IvyQtLink::~IvyQtLink()
