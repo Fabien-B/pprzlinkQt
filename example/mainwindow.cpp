@@ -14,12 +14,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auto dict = new pprzlink::MessageDictionary("/home/fabien/paparazzi/var/messages.xml");
 
-    auto link = new pprzlink::IvyQtLink(*dict, "test", "127.255.255.255:2010", this);
+    auto link = new pprzlink::IvyQtLink(*dict, "test", this);
+
+    link->start("127.255.255.255:2010");
 
     auto def_fp = dict->getDefinition("FLIGHT_PARAM");
 
     connect(link, &pprzlink::IvyQtLink::serverConnected, this, [=]() {
        qDebug() << "server connected!!!" ;
+    });
+
+
+    connect(ui->start_btn, &QPushButton::clicked, this, [=]() {
+        link->start();
+    });
+
+    connect(ui->stop_btn, &QPushButton::clicked, this, [=]() {
+        link->stop();
     });
 
 
