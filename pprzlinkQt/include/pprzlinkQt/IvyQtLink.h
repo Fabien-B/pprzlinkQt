@@ -17,9 +17,11 @@ namespace pprzlink {
         Q_OBJECT
     public:
 
-        explicit IvyQtLink(MessageDictionary const & dict , QString appName, QString domain = "127.255.255.255:2010", QObject *parent = nullptr);
+        explicit IvyQtLink(MessageDictionary const & dict , QString appName, QObject *parent = nullptr);
         ~IvyQtLink();
 
+        void start(QString domain = "127.255.255.255:2010");
+        void stop();
         long BindMessage(MessageDefinition const & def, QObject* context, messageCallback_t cb);
         void UnbindMessage(long bindId);
         void sendMessage(const Message& msg);

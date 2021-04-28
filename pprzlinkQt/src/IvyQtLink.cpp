@@ -2,13 +2,11 @@
 #include <ivyqt.h>
 
 namespace pprzlink {
-    IvyQtLink::IvyQtLink(MessageDictionary const & dict , QString appName, QString domain, QObject *parent) :
+    IvyQtLink::IvyQtLink(MessageDictionary const & dict , QString appName, QObject *parent) :
         QObject(parent),
-        dictionary (dict), domain(domain), appName(appName), requestNb(0)
+        dictionary (dict), appName(appName), requestNb(0)
     {
         bus = new IvyQt(appName, appName + " ready", this);
-        auto ip_port = domain.split(":");
-        assert(ip_port.size() == 2);
 
         connect(bus, &IvyQt::peerReady, this, [=](Peer* peer){
             if(peer->name() == "Paparazzi server") {
@@ -16,7 +14,19 @@ namespace pprzlink {
             }
         });
 
+    }
+
+    void IvyQtLink::start(QString domain) {
+        this->domain = domain;
+        auto ip_port = domain.split(":");
+        assert(ip_port.size() == 2);
         bus->start(ip_port[0], ip_port[1].toUInt());
+    }
+
+    void IvyQtLink::stop() {
+        bus->stop();
+        messagesCallbackMap.clear();
+        requestBindId.clear();
     }
 
     IvyQtLink::~IvyQtLink()
