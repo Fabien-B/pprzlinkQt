@@ -1,5 +1,6 @@
 #include <pprzlinkQt/IvyQtLink.h>
 #include <IvyQt/ivyqt.h>
+#include <unistd.h>
 
 namespace pprzlink {
     IvyQtLink::IvyQtLink(MessageDictionary const & dict , QString appName, QObject *parent) :
@@ -212,13 +213,12 @@ namespace pprzlink {
               cb(std::move(ac_id), std::move(msg));
 
               // find bind id, then unbind answer message
-              auto iter = requestBindId.left.find(requestId);
-              if (iter != requestBindId.left.end())
+              auto iter = requestBindId.find(requestId);
+              if (iter != requestBindId.end())
               {
-                long id = iter->second;
+                long id = iter.value();
                 UnbindMessage(id);
-                requestBindId.left.erase(requestId);
-
+                requestBindId.remove(requestId);
               }
             });
         };
@@ -227,7 +227,7 @@ namespace pprzlink {
         QString regexpStream = "^" + requestId + " ([^ ]*) " + messageRegexp(ansDef);
         auto id = bus->bindMessage(regexpStream, mcb);
         messagesCallbackMap[id] = mcb;
-        requestBindId.insert({requestId, id});
+        requestBindId[requestId] = id;
         QString message = ac_id + " " + requestId + " " + def.getName() + " " + fields;
         bus->send(message);
 

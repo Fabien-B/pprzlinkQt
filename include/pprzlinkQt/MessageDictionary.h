@@ -25,8 +25,8 @@
 #ifndef PPRZLINKCPP_MESSAGEDICTIONARY_H
 #define PPRZLINKCPP_MESSAGEDICTIONARY_H
 
+#include <QMap>
 #include <map>
-#include <boost/bimap.hpp>
 #include <pprzlinkQt/MessageDefinition.h>
 
 namespace pprzlink {
@@ -49,8 +49,8 @@ namespace pprzlink {
 
   private:
     std::map<QString, MessageDefinition> messagesDict;
-    boost::bimap<QString, std::pair<int, int>> msgNameToId;
-    boost::bimap<int,QString> classMap;
+    QMap<QString, std::pair<int, int>> msgNameToId;
+    QMap<int,QString> classMap;
   };
 }
 #endif //PPRZLINKCPP_MESSAGEDICTIONARY_H

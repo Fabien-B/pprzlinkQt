@@ -59,7 +59,7 @@ namespace pprzlink {
           {
             throw bad_message_file(fileName + " msg_class as no name or id.");
           }
-          classMap.left.insert(boost::bimap<int,QString>::left_value_type(classId,className));
+          classMap[classId] = className;
 
           for(auto message = msg_class.firstChildElement("message");
                       !message.isNull();
@@ -74,7 +74,7 @@ namespace pprzlink {
               {
                 MessageDefinition def(message, classId);
                 messagesDict[messageName]=def;
-                msgNameToId.left.insert(boost::bimap<QString, std::pair<int, int>>::left_value_type(messageName,std::make_pair(classId,messageId)));
+                msgNameToId[messageName] = std::make_pair(classId,messageId);
               } catch (bad_message_file &e)
               {
                 throw bad_message_file(fileName + " in class : " + className + " message " + messageName + " has a bad field.");
@@ -99,69 +99,54 @@ namespace pprzlink {
 
   const MessageDefinition &MessageDictionary::getDefinition(int classId, int msgId) const
   {
-    auto iter = msgNameToId.right.find(std::make_pair(classId, msgId));
-    if (iter == msgNameToId.right.end())
-    {
-      throw no_such_message("could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")");
+    for(auto iter=msgNameToId.begin(); iter!=msgNameToId.end(); ++iter) {
+        if(iter.value() == std::make_pair(classId, msgId)) {
+            QString name = iter.key();
+            //std::cout << "message with id (" << classId << ":" << msgId << ") = " << name << std::endl;
+            //std::cout << messagesDict.find(name)->second.toString() << std::endl;
+            return messagesDict.find(name)->second;
+        }
     }
-    else
-    {
-      QString name = iter->second;
-      //std::cout << "message with id (" << classId << ":" << msgId << ") = " << name << std::endl;
-      //std::cout << messagesDict.find(name)->second.toString() << std::endl;
-      return messagesDict.find(name)->second;
-    }
+
+    throw no_such_message("could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")");
   }
 
   std::pair<int, int> MessageDictionary::getMessageId(QString name) const
   {
-    auto iter = msgNameToId.left.find(name);
-    if (iter == msgNameToId.left.end())
-    {
-      throw no_such_message("No message with name " + name);
-    }
-    else
-    {
-      return iter->second;
+    if(msgNameToId.contains(name)) {
+        return msgNameToId[name];
+    } else {
+        throw no_such_message("No message with name " + name);
     }
   }
 
   QString MessageDictionary::getMessageName(int classId, int msgId) const
   {
-    auto iter = msgNameToId.right.find(std::make_pair(classId, msgId));
-    if (iter == msgNameToId.right.end())
-    {
+      for(auto iter=msgNameToId.begin(); iter!=msgNameToId.end(); ++iter) {
+          if(iter.value() == std::make_pair(classId, msgId)) {
+              return iter.key();
+          }
+      }
       throw no_such_message("could not find message with id (" + QString::number(classId) + ":" + QString::number(msgId) + ")");
-    }
-    else
-    {
-      return iter->second;
-    }
   }
 
   int MessageDictionary::getClassId(QString name) const
   {
-    auto iter = classMap.right.find(name);
-    if (iter == classMap.right.end())
-    {
+      for(auto iter=classMap.begin(); iter!=classMap.end(); ++iter) {
+          if(iter.value() == name) {
+              return iter.key();
+          }
+      }
+
       throw no_such_class("could not find class named " + name);
-    }
-    else
-    {
-      return iter->second;
-    }
   }
 
   QString MessageDictionary::getClassName(int id) const
   {
-    auto iter = classMap.left.find(id);
-    if (iter == classMap.left.end())
-    {
-      throw no_such_class("could not find class with id " + QString::number(id));
-    }
-    else
-    {
-      return iter->second;
+    if(classMap.contains(id)) {
+        return classMap[id];
+    } else {
+        throw no_such_class("could not find class with id " + QString::number(id));
     }
   }
 

@@ -36,7 +36,7 @@ namespace pprzlink {
       QString appName;
       IvyQt* bus;
       unsigned int requestNb;
-      boost::bimap<QString, long> requestBindId;
+      QMap<QString, long> requestBindId;
 
       void getMessageData(const Message& msg, QString &ac_id, QString &name, QString &fields);
 
