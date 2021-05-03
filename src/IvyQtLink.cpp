@@ -1,5 +1,5 @@
 #include <pprzlinkQt/IvyQtLink.h>
-#include <ivyqt.h>
+#include <IvyQt/ivyqt.h>
 
 namespace pprzlink {
     IvyQtLink::IvyQtLink(MessageDictionary const & dict , QString appName, QObject *parent) :

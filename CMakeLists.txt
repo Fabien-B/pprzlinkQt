@@ -18,8 +18,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS
     Network
     REQUIRED)
 
-set(IvyQt_DIR "../IvyQt/IvyQt/")
-add_subdirectory(${IvyQt_DIR} ivyqt)
+find_package(IvyQt REQUIRED)
 
 set(SOURCES 
     src/FieldValue.cpp
@@ -39,7 +38,6 @@ add_library(pprzlinkQt SHARED ${SOURCES})
 target_include_directories(
     ${PROJECT_NAME}
     PRIVATE
-    ${IvyQt_DIR}
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 #target_include_directories(PprzlinkQt_static PRIVATE ${IvyQt_DIR})
@@ -53,7 +51,10 @@ set(LINK_LIBRARIES
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Network
     IvyQt
-)    
+)
+
+include_directories(${CMAKE_PREFIX_PATH}/include)
+link_directories(${CMAKE_PREFIX_PATH}/lib)
 
 target_link_libraries(pprzlinkQt PRIVATE ${LINK_LIBRARIES})
 #target_link_libraries(PprzlinkQt_static PRIVATE ${LINK_LIBRARIES})
@@ -81,9 +82,4 @@ export(TARGETS
 )
 
 install(EXPORT ${PROJECT_NAME}Config DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake")
-
-
-
-
-
 
