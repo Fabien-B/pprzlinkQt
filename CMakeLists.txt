@@ -32,19 +32,13 @@ set(SOURCES
 )    
 
 
-#add_library(PprzlinkQt_static STATIC ${SOURCES})
-add_library(pprzlinkQt SHARED ${SOURCES})
+add_library(pprzlinkQt ${SOURCES})
 
 target_include_directories(
     ${PROJECT_NAME}
     PRIVATE
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-#target_include_directories(PprzlinkQt_static PRIVATE ${IvyQt_DIR})
-
-#set_target_properties(PprzlinkQt PROPERTIES
-#    VERSION 0.0.1
-#)
 
 set(LINK_LIBRARIES 
     Qt${QT_VERSION_MAJOR}::Core
@@ -57,12 +51,8 @@ include_directories(${CMAKE_PREFIX_PATH}/include)
 link_directories(${CMAKE_PREFIX_PATH}/lib)
 
 target_link_libraries(pprzlinkQt PRIVATE ${LINK_LIBRARIES})
-#target_link_libraries(PprzlinkQt_static PRIVATE ${LINK_LIBRARIES})
-
 
 target_compile_definitions(pprzlinkQt PRIVATE PPRZLINKQT_LIBRARY)
-#target_compile_definitions(PprzlinkQt_static PRIVATE PPRZLINKQT_LIBRARY)
-
 
 install(TARGETS pprzlinkQt
         EXPORT ${PROJECT_NAME}Config 
