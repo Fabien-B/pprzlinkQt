@@ -82,6 +82,7 @@ namespace pprzlink {
           {BaseType::UINT16, "\\d+"},
           {BaseType::UINT32, "\\d+"},
           {BaseType::FLOAT,  "-?\\d+(?:\\.)?(?:\\d)*"},
+          {BaseType::DOUBLE,  "-?\\d+(?:\\.)?(?:\\d)*"},
           {BaseType::STRING, "(?:\"[^\"]+\"|[^ ]+)"}
         };
         // ac_id MSG_NAME msgField*
@@ -277,6 +278,7 @@ namespace pprzlink {
                 case BaseType::UINT16:
                 case BaseType::UINT32:
                 case BaseType::FLOAT:
+                case BaseType::DOUBLE:
                 {
                   // Parse all numbers as a double
                   std::vector<double> values;
@@ -318,6 +320,7 @@ namespace pprzlink {
                 case BaseType::UINT16:
                 case BaseType::UINT32:
                 case BaseType::FLOAT:
+                case BaseType::DOUBLE:
                 {
                   // Parse all numbers as a double
                   double val;

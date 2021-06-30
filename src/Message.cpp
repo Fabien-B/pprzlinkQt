@@ -88,6 +88,9 @@ namespace pprzlink {
       case BaseType::FLOAT:
         stream << std::any_cast<float>(value);
         break;
+      case BaseType::DOUBLE:
+        stream << std::any_cast<double>(value);
+        break;
       case BaseType::STRING:
           stream << std::any_cast<QString>(value);
           break;
@@ -123,6 +126,8 @@ namespace pprzlink {
       case BaseType::UINT32:
         break;
       case BaseType::FLOAT:
+        break;
+      case BaseType::DOUBLE:
         break;
       case BaseType::STRING:
         break;
@@ -327,6 +332,12 @@ namespace pprzlink {
           addField(field.getName(),vec);
           break;
         }
+        case BaseType::DOUBLE:
+        {
+          auto vec = makeVector<double>(buffer,offset,size/elemSize,elemSize);
+          addField(field.getName(),vec);
+          break;
+        }
         default:
           throw std::logic_error("Type "+ fieldType.toString().toStdString() + " is not correct for PPRZ Transport.");
           break;
@@ -366,6 +377,12 @@ namespace pprzlink {
         {
           float *vf = (float*) &value;
           addField(field.getName(), (float) *vf);
+          break;
+        }
+        case BaseType::DOUBLE:
+        {
+          double *vf = (double*) &value;
+          addField(field.getName(), (double) *vf);
           break;
         }
         case BaseType::STRING:
