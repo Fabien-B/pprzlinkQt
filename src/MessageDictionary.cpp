@@ -36,7 +36,7 @@ namespace pprzlink {
       QDomDocument xml;
       QFile f(fileName);
       if(!f.open(QIODevice::ReadOnly)) {
-          throw std::runtime_error("Error while loading layout file");
+          throw std::runtime_error("Error loading dictionnary file: " + fileName.toStdString());
       }
       xml.setContent(&f);
       f.close();
