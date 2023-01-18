@@ -26,6 +26,7 @@ namespace pprzlink {
         void UnbindMessage(long bindId);
         void sendMessage(const Message& msg);
         long sendRequest(const Message& msg, messageCallback_t cb);
+	    IvyQt* ivy() {return bus;}
 
     signals:
         void serverConnected();
