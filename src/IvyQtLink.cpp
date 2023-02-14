@@ -160,7 +160,12 @@ namespace pprzlink {
           val.setOutputInt8AsInt(true);
           std::stringstream ss;
           ss << val;
-          fieldsStream += QString::fromStdString(ss.str());
+	  auto qs = QString::fromStdString(ss.str());
+          if(qs.contains(' ')) {
+            qs.prepend('"');
+            qs.append('"');
+          }
+          fieldsStream += qs;
         }
 
         name = def.getName();
