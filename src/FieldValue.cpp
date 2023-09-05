@@ -134,7 +134,7 @@ std::ostream& operator<<(std::ostream& o,const pprzlink::FieldValue& v)
         {
           if (i!=0)
             o << ",";
-          o << std::fixed << vec[i];
+          o << std::fixed << std::setprecision(7) << vec[i];
         }
       }
         break;
@@ -146,7 +146,7 @@ std::ostream& operator<<(std::ostream& o,const pprzlink::FieldValue& v)
         {
           if (i!=0)
             o << ",";
-          o << std::fixed << vec[i];
+          o << std::fixed << std::setprecision(7) << vec[i];
         }
       }
         break;
@@ -238,14 +238,14 @@ std::ostream& operator<<(std::ostream& o,const pprzlink::FieldValue& v)
       {
         float val;
         v.getValue(val);
-        o  << std::fixed << val;
+        o  << std::fixed << std::setprecision(7) << val;
       }
         break;
       case pprzlink::BaseType::DOUBLE:
       {
         double val;
         v.getValue(val);
-        o  << std::fixed << val;
+        o  << std::fixed << std::setprecision(7) << val;
       }
         break;
       case pprzlink::BaseType::STRING:
