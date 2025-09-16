@@ -246,7 +246,7 @@ namespace pprzlink {
         Message msg(def);
         if (def.getNbFields() != (size_t)(params.size() - 2) )
         {
-          QString sstr = params[1] + " message with wrong number of fields (expected " + def.getNbFields() + " / got " + QString::number(params.size()-2)
+          QString sstr = params[1] + " message with wrong number of fields (expected " + QString::number(def.getNbFields()) + " / got " + QString::number(params.size()-2)
                + ")";
           throw wrong_message_format(sstr);
         }
