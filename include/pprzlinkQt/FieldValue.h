@@ -66,7 +66,7 @@ namespace pprzlink {
         if (type.getArraySize() && type.getArraySize() != size)
         {
           QString sstr = "Wrong size in building value for " + field.getName() + ", got " + QString::number(size) + " / expected "
-               + type.getArraySize();
+               + QString::number(type.getArraySize());
           throw std::logic_error(sstr.toStdString());
         }
         std::vector <std::any> vec;
