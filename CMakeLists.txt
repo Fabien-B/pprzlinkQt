@@ -14,17 +14,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if(DEFINED ENV{QT_DIR})
-    set(Qt5_DIR $ENV{QT_DIR})
     set(Qt6_DIR $ENV{QT_DIR})
 endif()
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Xml REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Core Xml REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS
     Core
     Xml
     Network
     REQUIRED)
 
-find_package(IvyQt REQUIRED)
+add_subdirectory(IvyQt ${CMAKE_BINARY_DIR}/ivyqt)
 
 set(SOURCES 
     src/FieldValue.cpp
