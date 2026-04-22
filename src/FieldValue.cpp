@@ -365,6 +365,7 @@ namespace pprzlink {
             buffer.push_back((*ptrval & 0x00FF0000u) >> 16u);
             buffer.push_back((*ptrval & 0xFF000000u) >> 24u);
           }
+            break;
           case BaseType::DOUBLE:
           {
             char val = std::any_cast<double>(elem);
@@ -378,7 +379,6 @@ namespace pprzlink {
             buffer.push_back((*ptrval & 0x00FF000000000000u) >> 48u);
             buffer.push_back((*ptrval & 0xFF00000000000000u) >> 56u);
           }
-            break;
             break;
           case BaseType::STRING:
             throw std::logic_error("Cannot add an array of STRING to a buffer for field " + getName().toStdString());
