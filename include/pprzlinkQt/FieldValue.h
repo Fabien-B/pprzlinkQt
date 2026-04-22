@@ -111,7 +111,7 @@ namespace pprzlink {
       {
         // If it is a char array, treat this as any other array
         std::vector<std::any> v;
-        if (type.getArraySize() && type.getArraySize() != str.size())
+        if (type.getArraySize() && type.getArraySize() < static_cast<size_t>(str.size()))
         {
           QString sstr = "Wrong size in building value for " + field.getName() + ", got " + QString::number(str.size()) + " / expected "
                + QString::number(type.getArraySize());
