@@ -99,6 +99,44 @@ namespace pprzlink {
     /**
      *
      * @param index
+     */
+    QString getFieldAsStr(QString name) const
+    {
+      auto field = def.getField(name); // Will throw no_such_field if non existing field name
+      auto const &it = fieldValues.find(name);
+      if (it == fieldValues.end())
+      {
+        return "NOTSET";
+      }
+      bool isNumArray = it->second.getType().isArray() && it->second.getType().getBaseType()!=BaseType::CHAR;
+      QString sstr;
+      if (isNumArray) {
+        sstr += "{";
+      }
+      auto val =it->second;
+      val.setOutputInt8AsInt(true);
+      std::stringstream ss;
+      ss << val;
+      sstr += QString::fromStdString(ss.str());
+      if (isNumArray) {
+        sstr += "}";
+      }
+      return sstr;
+    }
+
+    /**
+     *
+     * @param index
+     */
+    QString getFieldAsStr(size_t index) const
+    {
+      auto name = def.getField(index).getName();
+      return getFieldAsStr(name);
+    }
+
+    /**
+     *
+     * @param index
      * @param buffer
      * @param offset
      */
