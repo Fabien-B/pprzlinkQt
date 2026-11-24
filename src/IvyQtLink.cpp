@@ -130,8 +130,8 @@ namespace pprzlink {
               if (def.getField(i).getType().getArraySize() == 0)
               {
                 // Dynamic array
-                // s => s,s,s,s => (s(?:,s)*)
-                sstr += " (" + baseRegex + "(?:," + baseRegex + ")*)";
+                // s => s,s,s,s => (,|s(?:,s)*) (an empty array is a lone ',')
+                sstr += " (,|" + baseRegex + "(?:," + baseRegex + ")*)";
               }
               else
               {
@@ -181,6 +181,9 @@ namespace pprzlink {
           std::stringstream ss;
           ss << val;
 	  auto qs = QString::fromStdString(ss.str());
+          if(qs.isEmpty() && val.getType().isArray() && val.getType().getBaseType() != BaseType::CHAR) {
+            qs = ",";   // an empty array is a lone ',' so that it stays one field
+          }
           if(qs.contains(' ')) {
             qs.prepend('"');
             qs.append('"');
@@ -307,8 +310,9 @@ namespace pprzlink {
                 {
                   // Parse all numbers as a double
                   std::vector<double> values;
-                  auto splitted = sstr.split(",");
-                  for(auto ele: splitted) {
+                  // an empty array is a lone ','
+                  auto splitted = sstr == "," ? QStringList() : sstr.split(",");
+                  for(const auto &ele: splitted) {
                       bool ok = false;
                       double val = parseNumber(ele, &ok);
                       if(!ok) {
