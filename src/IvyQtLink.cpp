@@ -1,6 +1,7 @@
 #include <pprzlinkQt/IvyQtLink.h>
 #include <IvyQt/ivyqt.h>
 #include <unistd.h>
+#include <cmath>
 
 namespace pprzlink {
     IvyQtLink::IvyQtLink(MessageDictionary const & dict , QString appName, QObject *parent) :
@@ -71,6 +72,24 @@ namespace pprzlink {
 //        }
       }
 
+    static const QString FLOAT_REGEX =
+      "[-+]?(?:\\d+(?:\\.\\d*)?(?:[eE][-+]?\\d+)?|[nN][aA][nN]|[iI][nN][fF])";
+
+    // a number of a message: QString::toDouble, which does not take a sign before nan ("-nan" of printf)
+    static double parseNumber(const QString &str, bool *ok)
+    {
+      double val = str.toDouble(ok);
+      if (!*ok && (str.startsWith('-') || str.startsWith('+')))
+      {
+        val = str.mid(1).toDouble(ok);
+        if (*ok && !std::isnan(val))
+        {
+          *ok = false;  // only a sign before nan is taken here (toDouble takes the others)
+        }
+      }
+      return val;
+    }
+
     QString IvyQtLink::messageRegexp(const MessageDefinition &def)
       {
         static const std::map<BaseType, QString> typeRegex = {
@@ -81,8 +100,9 @@ namespace pprzlink {
           {BaseType::UINT8,  "\\d+"},
           {BaseType::UINT16, "\\d+"},
           {BaseType::UINT32, "\\d+"},
-          {BaseType::FLOAT,  "-?\\d+(?:\\.)?(?:\\d)*"},
-          {BaseType::DOUBLE,  "-?\\d+(?:\\.)?(?:\\d)*"},
+          // also nan, -nan, inf, -inf and exponents (1e-05, -2.5E+03), as printed by the C/OCaml agents
+          {BaseType::FLOAT,  FLOAT_REGEX},
+          {BaseType::DOUBLE, FLOAT_REGEX},
           {BaseType::STRING, "(?:\"[^\"]+\"|[^ ]+)"}
         };
         // ac_id MSG_NAME msgField*
@@ -290,7 +310,7 @@ namespace pprzlink {
                   auto splitted = sstr.split(",");
                   for(auto ele: splitted) {
                       bool ok = false;
-                      double val = ele.toDouble(&ok);
+                      double val = parseNumber(ele, &ok);
                       if(!ok) {
                           throw wrong_message_format("Wrong format for array "+params[i]);
                       }
@@ -328,8 +348,8 @@ namespace pprzlink {
                 case BaseType::DOUBLE:
                 {
                   // Parse all numbers as a double
-                  double val;
-                  val = sstr.toDouble();
+                  bool ok = false;
+                  double val = parseNumber(sstr, &ok);
                   msg.addField(field.getName(), val); // The value will be statically cast to the right type
                 }
                   break;
